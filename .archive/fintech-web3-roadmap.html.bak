@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>6-Week Fintech & Web3 Engineering Roadmap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0b0c0f;
+        --bg2: #13141a;
+        --bg3: #1c1e27;
+        --border: rgba(255, 255, 255, 0.07);
+        --border2: rgba(255, 255, 255, 0.13);
+        --text: #e8e9f0;
+        --muted: #7a7c8e;
+        --hint: #454759;
+
+        --sol: #a78bfa;
+        --sol-bg: rgba(167, 139, 250, 0.1);
+        --sol-border: rgba(167, 139, 250, 0.3);
+
+        --nxt: #60a5fa;
+        --nxt-bg: rgba(96, 165, 250, 0.1);
+        --nxt-border: rgba(96, 165, 250, 0.3);
+
+        --nod: #4ade80;
+        --nod-bg: rgba(74, 222, 128, 0.1);
+        --nod-border: rgba(74, 222, 128, 0.3);
+
+        --gol: #fb923c;
+        --gol-bg: rgba(251, 146, 60, 0.1);
+        --gol-border: rgba(251, 146, 60, 0.3);
+
+        --arc: #f472b6;
+        --arc-bg: rgba(244, 114, 182, 0.1);
+        --arc-border: rgba(244, 114, 182, 0.3);
+
+        --mono: "Space Mono", monospace;
+        --sans: "DM Sans", sans-serif;
+        --radius: 10px;
+        --radius-lg: 16px;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 15px;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* ── Header ─────────────────────────────────── */
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 28px 40px 24px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        font-family: var(--sans);
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--text);
+        letter-spacing: -0.01em;
+      }
+
+      h1 span {
+        color: var(--sol);
+      }
+
+      .legend {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        font-family: var(--mono);
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* ── Main layout ────────────────────────────── */
+      main {
+        padding: 32px 40px 60px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* ── Week nav ───────────────────────────────── */
+      .week-nav {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 36px;
+      }
+
+      .wbtn {
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 7px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--border2);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.18s;
+        letter-spacing: 0.03em;
+      }
+
+      .wbtn:hover {
+        border-color: rgba(255, 255, 255, 0.25);
+        color: var(--text);
+      }
+
+      .wbtn.active {
+        background: var(--text);
+        color: var(--bg);
+        border-color: var(--text);
+        font-weight: 700;
+      }
+
+      /* ── Week header ────────────────────────────── */
+      .week-header {
+        margin-bottom: 28px;
+      }
+
+      .week-meta {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .week-theme {
+        font-size: 26px;
+        font-weight: 500;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+        line-height: 1.2;
+      }
+
+      .week-desc {
+        font-size: 14px;
+        color: var(--muted);
+        max-width: 700px;
+        line-height: 1.7;
+        font-weight: 300;
+      }
+
+      /* ── Progress row ───────────────────────────── */
+      .progress-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 32px;
+        padding: 14px 20px;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+
+      .prog-label {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        white-space: nowrap;
+        letter-spacing: 0.05em;
+      }
+
+      .prog-track {
+        flex: 1;
+        height: 3px;
+        background: var(--border2);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .prog-fill {
+        height: 100%;
+        background: var(--text);
+        border-radius: 2px;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .prog-pct {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        min-width: 36px;
+        text-align: right;
+        letter-spacing: 0.05em;
+      }
+
+      /* ── Cards grid ─────────────────────────────── */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+
+      .card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: border-color 0.2s;
+      }
+
+      .card:hover {
+        border-color: var(--border2);
+      }
+
+      /* colored top bar */
+      .card::before {
+        content: "";
+        display: block;
+        height: 2px;
+        border-radius: 1px;
+        margin-bottom: -4px;
+      }
+
+      .card.sol::before {
+        background: var(--sol);
+      }
+      .card.nxt::before {
+        background: var(--nxt);
+      }
+      .card.nod::before {
+        background: var(--nod);
+      }
+      .card.gol::before {
+        background: var(--gol);
+      }
+      .card.arc::before {
+        background: var(--arc);
+      }
+
+      /* ── Card badge ─────────────────────────────── */
+      .card-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        align-self: flex-start;
+      }
+
+      .card.sol .card-badge {
+        background: var(--sol-bg);
+        color: var(--sol);
+        border: 1px solid var(--sol-border);
+      }
+      .card.nxt .card-badge {
+        background: var(--nxt-bg);
+        color: var(--nxt);
+        border: 1px solid var(--nxt-border);
+      }
+      .card.nod .card-badge {
+        background: var(--nod-bg);
+        color: var(--nod);
+        border: 1px solid var(--nod-border);
+      }
+      .card.gol .card-badge {
+        background: var(--gol-bg);
+        color: var(--gol);
+        border: 1px solid var(--gol-border);
+      }
+      .card.arc .card-badge {
+        background: var(--arc-bg);
+        color: var(--arc);
+        border: 1px solid var(--arc-border);
+      }
+
+      .badge-icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.85;
+      }
+
+      /* ── Task list ──────────────────────────────── */
+      .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .task {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 6px 8px;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: background 0.15s;
+        user-select: none;
+      }
+
+      .task:hover {
+        background: var(--bg3);
+      }
+
+      .task input[type="checkbox"] {
+        display: none;
+      }
+
+      .check-box {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        border: 1.5px solid var(--hint);
+        flex-shrink: 0;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s;
+      }
+
+      .check-box svg {
+        width: 10px;
+        height: 10px;
+        stroke: var(--bg);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        opacity: 0;
+        transform: scale(0.6);
+        transition: all 0.18s;
+      }
+
+      .card.sol .task.done .check-box {
+        background: var(--sol);
+        border-color: var(--sol);
+      }
+      .card.nxt .task.done .check-box {
+        background: var(--nxt);
+        border-color: var(--nxt);
+      }
+      .card.nod .task.done .check-box {
+        background: var(--nod);
+        border-color: var(--nod);
+      }
+      .card.gol .task.done .check-box {
+        background: var(--gol);
+        border-color: var(--gol);
+      }
+      .card.arc .task.done .check-box {
+        background: var(--arc);
+        border-color: var(--arc);
+      }
+
+      .task.done .check-box svg {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .task-text {
+        font-size: 13.5px;
+        color: var(--text);
+        line-height: 1.5;
+        transition: color 0.15s;
+      }
+
+      .task.done .task-text {
+        color: var(--hint);
+        text-decoration: line-through;
+        text-decoration-color: var(--hint);
+      }
+
+      /* ── Capstone banner ────────────────────────── */
+      .capstone {
+        background: var(--bg2);
+        border: 1px solid var(--border2);
+        border-radius: var(--radius-lg);
+        padding: 20px 24px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .cap-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .cap-icon svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--muted);
+        stroke-width: 1.5;
+        fill: none;
+      }
+
+      .cap-body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .cap-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .cap-text {
+        font-size: 13.5px;
+        color: var(--text);
+        line-height: 1.6;
+        font-weight: 300;
+      }
+
+      /* ── Global progress footer ─────────────────── */
+      .global-progress {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(11, 12, 15, 0.9);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border);
+        padding: 12px 40px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        z-index: 100;
+      }
+
+      .gp-label {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        white-space: nowrap;
+        letter-spacing: 0.05em;
+      }
+
+      .gp-track {
+        flex: 1;
+        height: 2px;
+        background: var(--border2);
+        border-radius: 1px;
+        overflow: hidden;
+      }
+
+      .gp-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--sol),
+          var(--nxt),
+          var(--nod),
+          var(--gol),
+          var(--arc)
+        );
+        background-size: 300% 100%;
+        border-radius: 1px;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .gp-count {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        white-space: nowrap;
+        letter-spacing: 0.05em;
+      }
+
+      .week-dots {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .week-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border2);
+        transition: background 0.3s;
+      }
+
+      .week-dot.has-progress {
+        background: var(--sol);
+      }
+
+      /* ── Animations ─────────────────────────────── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card {
+        animation: fadeUp 0.25s ease both;
+      }
+      .card:nth-child(1) {
+        animation-delay: 0.03s;
+      }
+      .card:nth-child(2) {
+        animation-delay: 0.07s;
+      }
+      .card:nth-child(3) {
+        animation-delay: 0.11s;
+      }
+      .card:nth-child(4) {
+        animation-delay: 0.15s;
+      }
+      .card:nth-child(5) {
+        animation-delay: 0.19s;
+      }
+
+      /* ── Responsive ─────────────────────────────── */
+      @media (max-width: 640px) {
+        header {
+          padding: 20px 20px 18px;
+        }
+        main {
+          padding: 24px 20px 80px;
+        }
+        .global-progress {
+          padding: 10px 20px;
+        }
+        .week-theme {
+          font-size: 20px;
+        }
+        .legend {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <div class="eyebrow">Engineering Roadmap · 2025</div>
+        <h1>6-Week <span>Fintech</span> &amp; Web3 Path</h1>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="dot" style="background: var(--sol)"></div>
+          Solidity
+        </div>
+        <div class="legend-item">
+          <div class="dot" style="background: var(--nxt)"></div>
+          Next.js
+        </div>
+        <div class="legend-item">
+          <div class="dot" style="background: var(--nod)"></div>
+          Node.js
+        </div>
+        <div class="legend-item">
+          <div class="dot" style="background: var(--gol)"></div>
+          Go
+        </div>
+        <div class="legend-item">
+          <div class="dot" style="background: var(--arc)"></div>
+          Sys arch
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="week-nav" id="weekNav" aria-label="Week navigation"></nav>
+
+      <div class="week-header">
+        <div class="week-meta" id="weekMeta"></div>
+        <div class="week-theme" id="weekTheme"></div>
+        <div class="week-desc" id="weekDesc"></div>
+      </div>
+
+      <div class="progress-row">
+        <span class="prog-label" id="progLabel">WEEK PROGRESS</span>
+        <div class="prog-track">
+          <div class="prog-fill" id="progFill" style="width: 0%"></div>
+        </div>
+        <span class="prog-pct" id="progPct">0%</span>
+      </div>
+
+      <div class="grid" id="cardGrid"></div>
+      <div class="capstone" id="capstoneBanner"></div>
+    </main>
+
+    <footer class="global-progress">
+      <span class="gp-label">OVERALL</span>
+      <div class="gp-track">
+        <div class="gp-fill" id="gpFill" style="width: 0%"></div>
+      </div>
+      <div class="week-dots" id="weekDots"></div>
+      <span class="gp-count" id="gpCount">0 / 0</span>
+    </footer>
+
+    <script>
+      const WEEKS = [
+        {
+          label: "Week 1",
+          theme: "Foundations & environment setup",
+          desc: "Install every tool, understand core primitives, and write your first working program in each stack. Speed matters less than clarity this week.",
+          project:
+            "Write an ERC-20-like counter contract, a Next.js page that fetches a JSON API, and a Go program that prints Fibonacci numbers.",
+          tracks: [
+            {
+              name: "Solidity",
+              cls: "sol",
+              icon: "contract",
+              tasks: [
+                "Install Foundry & VS Code Solidity extension",
+                "Learn types: uint, address, bool, bytes, string",
+                "Write a basic Storage contract with getter/setter",
+                "Understand function visibility: public, private, internal, external",
+                "Deploy to Anvil local testnet via forge script",
+              ],
+            },
+            {
+              name: "Next.js",
+              cls: "nxt",
+              icon: "nextjs",
+              tasks: [
+                "Bootstrap with create-next-app (App Router)",
+                "Understand file-based routing: pages, layouts, not-found",
+                "Build a static home page with Tailwind CSS",
+                "Create a basic API route at /api/hello",
+                "Learn Server vs Client components — when to use each",
+              ],
+            },
+            {
+              name: "Node.js",
+              cls: "nod",
+              icon: "node",
+              tasks: [
+                "Understand the event loop and non-blocking I/O",
+                "CommonJS vs ESModules — import/require differences",
+                "Use built-in fs, path, and http modules",
+                "Set up npm project with package.json scripts",
+                "Write a simple TCP server and a file watcher",
+              ],
+            },
+            {
+              name: "Go",
+              cls: "gol",
+              icon: "go",
+              tasks: [
+                "Install Go, set GOPATH, learn go mod init",
+                "Learn types: int, string, bool, slices, maps",
+                "Write functions with multiple return values",
+                "Understand Go's error-as-value pattern",
+                "Build a CLI tool that reads a JSON file and prints output",
+              ],
+            },
+            {
+              name: "Sys arch",
+              cls: "arc",
+              icon: "arch",
+              tasks: [
+                "Study CAP theorem with real examples (Cassandra vs PostgreSQL)",
+                "Learn HTTP/1.1 vs HTTP/2 vs WebSocket differences",
+                "Draw a monolith vs microservices comparison",
+                "Understand DNS resolution end-to-end",
+                "Read about the 12-factor app methodology",
+              ],
+            },
+          ],
+        },
+        {
+          label: "Week 2",
+          theme: "Core patterns & first real features",
+          desc: "Stop doing toy examples — build the first meaningful features. Leave this week with a working REST API, a tested smart contract, and Go concurrency basics under your belt.",
+          project:
+            "REST API in Node.js with full CRUD + Zod validation, ERC-20 with mint/burn/transfer tests passing, Go HTTP server returning mock crypto price data.",
+          tracks: [
+            {
+              name: "Solidity",
+              cls: "sol",
+              icon: "contract",
+              tasks: [
+                "State variables, mappings, and dynamic arrays",
+                "Events: emit, index, and listen from frontend",
+                "Implement ERC-20 from scratch (no OpenZeppelin yet)",
+                "Write unit tests with Foundry (forge test)",
+                "Understand gas: what costs what and why",
+              ],
+            },
+            {
+              name: "Next.js",
+              cls: "nxt",
+              icon: "nextjs",
+              tasks: [
+                "Master dynamic routes: [id], [...slug], (groups)",
+                "Fetch data with fetch() in Server Components",
+                "Use useRouter, useParams, useSearchParams hooks",
+                "Implement loading.tsx and error.tsx boundaries",
+                "Add metadata API for SEO — title, description, OG tags",
+              ],
+            },
+            {
+              name: "Node.js",
+              cls: "nod",
+              icon: "node",
+              tasks: [
+                "Set up Express with TypeScript and ts-node",
+                "Build CRUD REST API with in-memory data store",
+                "Write middleware: logging, CORS, global error handler",
+                "Understand streams — pipe a large file without memory spike",
+                "Validate request bodies with Zod schemas",
+              ],
+            },
+            {
+              name: "Go",
+              cls: "gol",
+              icon: "go",
+              tasks: [
+                "Structs, methods, and interfaces — Go's OOP equivalent",
+                "Goroutines: launch 1000, understand the scheduler",
+                "Channels: unbuffered vs buffered, select statement",
+                "Build an HTTP server with net/http + JSON responses",
+                "Handle panics gracefully with defer and recover",
+              ],
+            },
+            {
+              name: "Sys arch",
+              cls: "arc",
+              icon: "arch",
+              tasks: [
+                "REST API design: resource naming, HTTP verbs, status codes",
+                "Load balancing: round-robin, least-connections, IP hash",
+                "Caching layers: browser, CDN, Redis, DB query cache",
+                "Understand reverse proxy — how Nginx routes to backends",
+                "Rate limiting algorithms: token bucket vs leaky bucket",
+              ],
+            },
+          ],
+        },
+        {
+          label: "Week 3",
+          theme: "Auth, databases & contract standards",
+          desc: "Everything gets stateful this week. Connect your Node API to PostgreSQL, add JWT auth to Next.js, write production-grade contracts using OpenZeppelin, and learn Go database patterns.",
+          project:
+            "Full-stack auth flow (Next.js + Node.js + PostgreSQL with Prisma). An NFT contract with royalties and 100% test coverage in Foundry.",
+          tracks: [
+            {
+              name: "Solidity",
+              cls: "sol",
+              icon: "contract",
+              tasks: [
+                "Inheritance, abstract contracts, and interfaces",
+                "Use OpenZeppelin ERC-20 and ERC-721 as base",
+                "Write an NFT contract with mint, tokenURI, royalties",
+                "Custom errors vs revert strings — gas tradeoffs",
+                "Fuzz testing with Foundry: forge test --fuzz-runs 10000",
+              ],
+            },
+            {
+              name: "Next.js",
+              cls: "nxt",
+              icon: "nextjs",
+              tasks: [
+                "Implement Auth.js (NextAuth) with GitHub OAuth",
+                "Protect routes with middleware.ts using JWT sessions",
+                "Server Actions: form submission without an API route",
+                "Optimistic UI with the useOptimistic hook",
+                "Connect to Neon or Supabase Postgres via Prisma",
+              ],
+            },
+            {
+              name: "Node.js",
+              cls: "nod",
+              icon: "node",
+              tasks: [
+                "Integrate PostgreSQL with Prisma ORM",
+                "Design a users + accounts schema with migrations",
+                "Implement JWT: sign on login, verify on every request",
+                "Refresh token rotation — store hashed tokens in DB",
+                "Write integration tests with Supertest + Jest",
+              ],
+            },
+            {
+              name: "Go",
+              cls: "gol",
+              icon: "go",
+              tasks: [
+                "Use pgx/v5 to connect to PostgreSQL",
+                "Write typed queries with sqlc (compile SQL to Go)",
+                "DB connection pooling — pgxpool configuration",
+                "Use Gin or Chi router for clean HTTP handler structure",
+                "Middleware in Go: auth, logging, panic recovery",
+              ],
+            },
+            {
+              name: "Sys arch",
+              cls: "arc",
+              icon: "arch",
+              tasks: [
+                "Database design: normalization, indexes, foreign keys",
+                "ACID properties — walk through a bank transfer scenario",
+                "Read/write splitting and replica lag implications",
+                "Connection pooling: PgBouncer, Prisma Accelerate",
+                "Eventual consistency with real DynamoDB examples",
+              ],
+            },
+          ],
+        },
+        {
+          label: "Week 4",
+          theme: "Advanced patterns & DeFi mechanics",
+          desc: "The hardest week. DeFi protocol internals, Go concurrency at scale, event-driven architecture, and stateful Web3 frontends. Push through — this separates junior from mid-level engineers.",
+          project:
+            "AMM contract deployed on Sepolia testnet. Node.js blockchain event listener populating a database. Next.js dashboard showing live pool TVL and swap history.",
+          tracks: [
+            {
+              name: "Solidity",
+              cls: "sol",
+              icon: "contract",
+              tasks: [
+                "Reentrancy attacks: study the DAO hack, apply CEI pattern",
+                "Upgradeable contracts: UUPS vs Transparent proxy",
+                "Build a basic AMM: x*y=k pricing, addLiquidity, swap",
+                "ERC-4626 vault standard — tokenized yield vaults",
+                "Oracle integration with Chainlink price feeds",
+              ],
+            },
+            {
+              name: "Next.js",
+              cls: "nxt",
+              icon: "nextjs",
+              tasks: [
+                "Integrate wagmi + viem for wallet connection",
+                "Read on-chain data (balances, contract state) in Server Components",
+                "Write to contracts with useSendTransaction hook",
+                "ISR with revalidate — cache on-chain data intelligently",
+                "Build a token dashboard with real-time price updates via SWR",
+              ],
+            },
+            {
+              name: "Node.js",
+              cls: "nod",
+              icon: "node",
+              tasks: [
+                "Set up Bull + Redis for background job queues",
+                "On-chain event listener with ethers.js WebSocketProvider",
+                "WebSocket server for real-time price push to frontend",
+                "Implement idempotent payment processing (replay protection)",
+                "Rate limiting per user with Redis sliding window",
+              ],
+            },
+            {
+              name: "Go",
+              cls: "gol",
+              icon: "go",
+              tasks: [
+                "Build a gRPC service with protobuf definitions",
+                "Worker pool pattern: fan-out jobs across goroutines",
+                "Graceful shutdown with os.Signal and context cancellation",
+                "Write a CLI trading bot scaffold with Go flags",
+                "Benchmark critical paths with go test -bench",
+              ],
+            },
+            {
+              name: "Sys arch",
+              cls: "arc",
+              icon: "arch",
+              tasks: [
+                "Event-driven architecture: producers, consumers, and topics",
+                "CQRS pattern: separate read and write models with examples",
+                "Kafka vs RabbitMQ vs Redis Streams — tradeoffs by use case",
+                "Saga pattern for distributed financial transactions",
+                "Design a payment processing system on paper — end to end",
+              ],
+            },
+          ],
+        },
+        {
+          label: "Week 5",
+          theme: "Security, testing & hardening",
+          desc: "A fintech/Web3 engineer who doesn't test is a liability. This week is entirely about hardening: auditing contracts, writing thorough test suites, securing APIs, and thinking like an attacker.",
+          project:
+            "Full audit report for the AMM contract. Node.js API hitting 80%+ test coverage. Playwright E2E suite covering the complete Next.js auth + trading flow.",
+          tracks: [
+            {
+              name: "Solidity",
+              cls: "sol",
+              icon: "contract",
+              tasks: [
+                "Run Slither static analyser on your contracts — fix every warning",
+                "Integer overflow/underflow — pre/post Solidity 0.8 differences",
+                "Front-running and MEV: identify vulnerable patterns in your AMM",
+                "Access control audit: Ownable vs AccessControl vs custom roles",
+                "Write a formal audit report for your week 4 AMM contract",
+              ],
+            },
+            {
+              name: "Next.js",
+              cls: "nxt",
+              icon: "nextjs",
+              tasks: [
+                "Unit test components with Vitest + React Testing Library",
+                "E2E tests with Playwright — test the full auth flow",
+                "Add CSP, HSTS, X-Frame-Options via next.config.js headers",
+                "Input sanitization — prevent XSS in user-generated content",
+                "Test Server Actions with a mocked Prisma client",
+              ],
+            },
+            {
+              name: "Node.js",
+              cls: "nod",
+              icon: "node",
+              tasks: [
+                "Unit test all service functions — target 80%+ line coverage",
+                "Mock external services: payment API, blockchain RPC",
+                "Secrets management — use AWS Secrets Manager pattern",
+                "SQL injection prevention — parameterized queries only",
+                "Structured logging with Winston + correlation IDs",
+              ],
+            },
+            {
+              name: "Go",
+              cls: "gol",
+              icon: "go",
+              tasks: [
+                "Write table-driven tests — Go's idiomatic testing pattern",
+                "Use -race flag to catch data races in goroutines",
+                "Profile CPU and memory usage with pprof",
+                "Secure HTTP: read timeouts, max header size, TLS config",
+                "Static analysis with go vet and staticcheck",
+              ],
+            },
+            {
+              name: "Sys arch",
+              cls: "arc",
+              icon: "arch",
+              tasks: [
+                "Zero-trust network design — never trust, always verify",
+                "DDoS mitigation: rate limiting, CAPTCHAs, CDN WAF shield",
+                "PCI-DSS requirements for card data — what you can/can't store",
+                "Threat modelling: draw the full attack surface for your system",
+                "Disaster recovery: RTO vs RPO, backup strategies, failover",
+              ],
+            },
+          ],
+        },
+        {
+          label: "Week 6",
+          theme: "Production, deployment & capstone",
+          desc: "Ship everything. Bridge the gap between 'it works locally' and production-grade systems. Deploy, monitor, document, and present your capstone to close out the six weeks.",
+          project:
+            "Capstone: Live testnet DeFi app — Next.js frontend, Node.js API + event listener, AMM on Sepolia, Go microservice for price aggregation. Deployed, documented, and monitored.",
+          tracks: [
+            {
+              name: "Solidity",
+              cls: "sol",
+              icon: "contract",
+              tasks: [
+                "Deploy AMM contract to Sepolia testnet via forge script",
+                "Verify source code on Etherscan with forge verify-contract",
+                "Write natspec documentation for all public functions",
+                "Set up CI: compile + test on every PR with GitHub Actions",
+                "Submit to a mock audit checklist — document all known risks",
+              ],
+            },
+            {
+              name: "Next.js",
+              cls: "nxt",
+              icon: "nextjs",
+              tasks: [
+                "Deploy to Vercel with environment variables configured",
+                "Set up Sentry for frontend error tracking and alerting",
+                "Audit Core Web Vitals: LCP, CLS, INP with Lighthouse",
+                "Add PWA support and offline fallback with next-pwa",
+                "Load test the frontend — measure TTFB under concurrent users",
+              ],
+            },
+            {
+              name: "Node.js",
+              cls: "nod",
+              icon: "node",
+              tasks: [
+                "Containerize the API with a multi-stage Dockerfile",
+                "GitHub Actions pipeline: lint → test → build → push image",
+                "Add /health and /ready endpoints for Kubernetes probes",
+                "Ship structured logs to Logtail or Datadog",
+                "Write an API runbook: how to deploy, rollback, and debug",
+              ],
+            },
+            {
+              name: "Go",
+              cls: "gol",
+              icon: "go",
+              tasks: [
+                "Build a static binary for Linux — cross-compile from Mac",
+                "Write a Kubernetes deployment.yaml + service.yaml",
+                "Add Prometheus metrics endpoint at /metrics",
+                "Configure a Grafana dashboard for your service",
+                "Document every public function and package with godoc",
+              ],
+            },
+            {
+              name: "Sys arch",
+              cls: "arc",
+              icon: "arch",
+              tasks: [
+                "Design the complete fintech system: wallet, trading, payments, auth",
+                "Justify which services belong in Go vs Node.js and why",
+                "Map data flows: which events trigger which downstream jobs",
+                "Write Architecture Decision Records (ADRs) for 3 key choices",
+                "Present the architecture: explain trade-offs for each major decision",
+              ],
+            },
+          ],
+        },
+      ];
+
+      const ICONS = {
+        contract: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+        nextjs: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M17.5 16.5L9 7.5M9 7.5v9M9 7.5h6"/></svg>`,
+        node: `<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+        go: `<svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="4"/><circle cx="8" cy="12" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/></svg>`,
+        arch: `<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/><line x1="5" y1="19" x2="19" y2="19"/></svg>`,
+        target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+      };
+
+      const checks = {};
+      let currentWeek = 0;
+
+      function key(w, t, i) {
+        return `${w}-${t}-${i}`;
+      }
+
+      function totalForWeek(w) {
+        return WEEKS[w].tracks.reduce((s, t) => s + t.tasks.length, 0);
+      }
+
+      function doneForWeek(w) {
+        let n = 0;
+        WEEKS[w].tracks.forEach((t, ti) =>
+          t.tasks.forEach((_, i) => {
+            if (checks[key(w, ti, i)]) n++;
+          }),
+        );
+        return n;
+      }
+
+      function globalTotal() {
+        return WEEKS.reduce((s, _, w) => s + totalForWeek(w), 0);
+      }
+
+      function globalDone() {
+        return WEEKS.reduce((s, _, w) => s + doneForWeek(w), 0);
+      }
+
+      function updateProgress() {
+        const done = doneForWeek(currentWeek);
+        const total = totalForWeek(currentWeek);
+        const pct = total ? Math.round((done / total) * 100) : 0;
+        document.getElementById("progFill").style.width = pct + "%";
+        document.getElementById("progPct").textContent = pct + "%";
+        document.getElementById(
+          "progLabel",
+        ).textContent = `WEEK PROGRESS · ${done}/${total} tasks`;
+
+        const gd = globalDone(),
+          gt = globalTotal();
+        const gpct = gt ? Math.round((gd / gt) * 100) : 0;
+        document.getElementById("gpFill").style.width = gpct + "%";
+        document.getElementById("gpCount").textContent = `${gd} / ${gt}`;
+
+        document.querySelectorAll(".week-dot").forEach((dot, i) => {
+          dot.classList.toggle("has-progress", doneForWeek(i) > 0);
+        });
+      }
+
+      function buildNav() {
+        const nav = document.getElementById("weekNav");
+        nav.innerHTML = "";
+        WEEKS.forEach((w, i) => {
+          const btn = document.createElement("button");
+          btn.className = "wbtn" + (i === currentWeek ? " active" : "");
+          btn.textContent = w.label;
+          btn.setAttribute(
+            "aria-current",
+            i === currentWeek ? "page" : "false",
+          );
+          btn.onclick = () => {
+            currentWeek = i;
+            render();
+          };
+          nav.appendChild(btn);
+        });
+      }
+
+      function buildDots() {
+        const container = document.getElementById("weekDots");
+        container.innerHTML = "";
+        WEEKS.forEach((_, i) => {
+          const d = document.createElement("div");
+          d.className = "week-dot";
+          container.appendChild(d);
+        });
+      }
+
+      function buildCards() {
+        const grid = document.getElementById("cardGrid");
+        const w = WEEKS[currentWeek];
+        grid.innerHTML = "";
+
+        w.tracks.forEach((track, ti) => {
+          const card = document.createElement("div");
+          card.className = `card ${track.cls}`;
+
+          const badge = `
+      <div class="card-badge">
+        <svg class="badge-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          ${ICONS[track.icon]}
+        </svg>
+        ${track.name.toUpperCase()}
+      </div>`;
+
+          const tasks = track.tasks
+            .map((task, i) => {
+              const k = key(currentWeek, ti, i);
+              const done = checks[k] || false;
+              return `
+        <label class="task${
+          done ? " done" : ""
+        }" data-w="${currentWeek}" data-t="${ti}" data-i="${i}">
+          <input type="checkbox" ${done ? "checked" : ""}>
+          <div class="check-box">
+            <svg viewBox="0 0 12 10"><polyline points="1.5 5 4.5 8 10.5 1.5"/></svg>
+          </div>
+          <span class="task-text">${task}</span>
+        </label>`;
+            })
+            .join("");
+
+          card.innerHTML = badge + `<div class="task-list">${tasks}</div>`;
+          grid.appendChild(card);
+        });
+
+        grid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+          cb.addEventListener("change", function () {
+            const label = this.closest(".task");
+            const w = +label.dataset.w,
+              t = +label.dataset.t,
+              i = +label.dataset.i;
+            checks[key(w, t, i)] = this.checked;
+            label.classList.toggle("done", this.checked);
+            updateProgress();
+          });
+        });
+
+        const cap = document.getElementById("capstoneBanner");
+        cap.innerHTML = `
+    <div class="cap-icon">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${ICONS.target}</svg>
+    </div>
+    <div class="cap-body">
+      <div class="cap-label">Week project</div>
+      <div class="cap-text">${w.project}</div>
+    </div>`;
+      }
+
+      function buildWeekHeader() {
+        const w = WEEKS[currentWeek];
+        document.getElementById("weekMeta").textContent = `Week ${
+          currentWeek + 1
+        } of ${WEEKS.length}`;
+        document.getElementById("weekTheme").textContent = w.theme;
+        document.getElementById("weekDesc").textContent = w.desc;
+      }
+
+      function render() {
+        buildNav();
+        buildWeekHeader();
+        buildCards();
+        updateProgress();
+      }
+
+      buildDots();
+      render();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "name": "engineering-roadmap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A premium engineering learning platform with 12-week structured roadmaps for Fintech & Web3 Engineering and Rust + Smart Contract Security Auditing.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,md,mdx,json}\""
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "next-themes": "0.3.0",
+    "clsx": "2.1.1",
+    "tailwind-merge": "2.5.2",
+    "fuse.js": "7.0.0",
+    "lucide-react": "0.441.0",
+    "shiki": "1.16.2",
+    "zustand": "4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "20.16.5",
+    "@types/react": "18.3.5",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.45",
+    "prettier": "3.3.3",
+    "prettier-plugin-tailwindcss": "0.6.6",
+    "tailwindcss": "3.4.10",
+    "typescript": "5.5.4"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}

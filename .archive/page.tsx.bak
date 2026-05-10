@@ -1,0 +1,617 @@
+import type { Metadata } from "next";
+import ClosingCta from "@/components/sections/ClosingCta";
+import Container from "@/components/layout/Container";
+import PageHero from "@/components/sections/PageHero";
+import { Button } from "@/components/ui/Button";
+import Card, {
+  CardBody,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardMeta,
+  CardNumber,
+  CardTitle,
+  CardValue,
+} from "@/components/ui/Card";
+import { ArrowRightIcon } from "@/components/ui/Icons";
+import Section from "@/components/ui/Section";
+
+export const metadata: Metadata = {
+  title: "Roadmap | Adedamola Maxwell",
+  description:
+    "A structured six-week roadmap for engineers moving into fintech and web3 infrastructure, spanning backend systems, ledgers, frontend operations, smart contracts, distributed services, and production reliability.",
+};
+
+const roadmapPhases = [
+  {
+    week: "Week 1",
+    stage: "Runtime foundations",
+    title: "TypeScript, Node.js, APIs, and transactional data design",
+    focus:
+      "Establish the backend language, runtime, and database habits needed before money movement enters the picture.",
+    rationale:
+      "Most fintech failures start with weak system boundaries. The first week is about understanding request lifecycles, async behavior, schemas, and auth decisions before introducing financial state.",
+    systems: [
+      "HTTP request lifecycles, async control flow, streams, and background work",
+      "PostgreSQL schemas, transactions, indexes, and migration discipline",
+      "Authentication, session models, RBAC, and webhook verification",
+    ],
+    deliverables: [
+      "Typed authentication service with audit logging",
+      "Wallet profile API backed by PostgreSQL",
+      "Webhook receiver with idempotency protection",
+    ],
+    stack: ["TypeScript", "Node.js", "PostgreSQL", "Redis", "REST APIs"],
+    reviewGate:
+      "Can you explain how state changes move from HTTP request to durable storage without race conditions?",
+    tone:
+      "color-mix(in srgb, var(--brand-soft) 56%, var(--panel) 44%)",
+  },
+  {
+    week: "Week 2",
+    stage: "Money movement",
+    title: "Ledgers, payment lifecycles, retries, and reconciliation",
+    focus:
+      "Move from CRUD thinking into financial systems thinking: authorization, posting, settlement, failure, and recovery.",
+    rationale:
+      "A real payments system is not just an API wrapper. It is a set of explicit states, double-entry rules, and recovery paths that hold up when providers fail or data arrives late.",
+    systems: [
+      "Authorization, capture, settlement, payout, and reversal states",
+      "Immutable double-entry ledger posting and reconciliation patterns",
+      "Webhook retry strategy, idempotency keys, and audit evidence",
+    ],
+    deliverables: [
+      "Ledger engine with account posting constraints",
+      "Payout orchestration flow with failure recovery",
+      "Reconciliation worker for provider-versus-ledger drift",
+    ],
+    stack: ["PostgreSQL", "Redis", "Queues", "BullMQ", "Provider webhooks"],
+    reviewGate:
+      "Can you model a failed payout so operations can retry safely without duplicating financial state?",
+    tone:
+      "color-mix(in srgb, var(--gold) 16%, var(--panel) 84%)",
+  },
+  {
+    week: "Week 3",
+    stage: "Operator interfaces",
+    title: "Next.js systems UI for operations, treasury, and internal tooling",
+    focus:
+      "Translate backend truth into clear internal interfaces that support review, triage, and decision-making.",
+    rationale:
+      "Infrastructure is only as usable as its operator surface. This stage focuses on turning system state into production-grade admin tooling rather than decorative dashboards.",
+    systems: [
+      "App Router architecture, server actions, cache boundaries, and route design",
+      "Admin flows for filters, workflows, failure states, and operational auditability",
+      "State synchronization between server data, forms, and privileged actions",
+    ],
+    deliverables: [
+      "Fintech admin console with queue and status controls",
+      "Treasury or transaction review interface",
+      "Alerting and content operations surface with pagination and search",
+    ],
+    stack: ["Next.js", "React", "Tailwind", "Server Actions", "UI tokens"],
+    reviewGate:
+      "Can an operator use your UI to recover from a bad delivery or alert without guessing what the system did?",
+    tone:
+      "color-mix(in srgb, var(--signal-soft) 48%, var(--panel) 52%)",
+  },
+  {
+    week: "Week 4",
+    stage: "On-chain primitives",
+    title: "Smart contract engineering, security review, and protocol mechanics",
+    focus:
+      "Build enough Solidity depth to reason about protocol state, not just write syntax-correct contracts.",
+    rationale:
+      "In web3 infrastructure, the contract is part of the production system boundary. You need to understand allowances, escrow logic, upgrade assumptions, and failure conditions with the same rigor as backend services.",
+    systems: [
+      "ERC standards, escrow mechanics, vault logic, and signer trust models",
+      "Testing, invariant thinking, and exploit-oriented review habits",
+      "Upgradeability, treasury control, and protocol state transitions",
+    ],
+    deliverables: [
+      "Escrow or vault primitive with test coverage",
+      "Treasury multi-signature control pattern",
+      "Security checklist for common contract failure modes",
+    ],
+    stack: ["Solidity", "Foundry", "OpenZeppelin", "ethers", "viem"],
+    reviewGate:
+      "Can you describe the exact trust assumptions in your contract and where funds become vulnerable?",
+    tone:
+      "color-mix(in srgb, var(--brand) 10%, var(--panel) 90%)",
+  },
+  {
+    week: "Week 5",
+    stage: "Distributed execution",
+    title: "Go services, concurrency, event buses, and service choreography",
+    focus:
+      "Introduce the performance and coordination patterns needed when workloads move beyond a single service boundary.",
+    rationale:
+      "Once systems fan out across queues, consumers, and workers, the challenge becomes coordination under partial failure. This is where concurrency and event design start to matter deeply.",
+    systems: [
+      "Goroutines, worker lifecycles, and safe concurrent execution",
+      "Event contracts, queues, dead-letter handling, and backpressure",
+      "Saga orchestration and distributed transaction tradeoffs",
+    ],
+    deliverables: [
+      "Event-driven worker or order execution service",
+      "Saga coordinator for multi-step financial operations",
+      "Queue topology for retries, poison messages, and recovery",
+    ],
+    stack: ["Go", "Kafka", "gRPC", "Redis", "Docker"],
+    reviewGate:
+      "Can you trace how a multi-step workflow recovers when one downstream dependency fails mid-flight?",
+    tone:
+      "color-mix(in srgb, var(--gold) 10%, var(--panel) 90%)",
+  },
+  {
+    week: "Week 6",
+    stage: "Production reliability",
+    title: "Observability, deployment discipline, security posture, and full-system architecture",
+    focus:
+      "Bring the individual layers together into a system that can be deployed, monitored, and defended in production.",
+    rationale:
+      "The last stage is where engineering becomes systems leadership. You are no longer just shipping features. You are proving that the entire stack is observable, recoverable, and operable under pressure.",
+    systems: [
+      "Infrastructure observability, dashboards, alerts, and audit trails",
+      "Cloud deployment, secrets, environments, and release controls",
+      "Resilience design, failure domains, and security hardening",
+    ],
+    deliverables: [
+      "Production architecture blueprint for a fintech or hybrid web3 stack",
+      "Monitoring and incident-response map",
+      "Deployment and rollback checklist with environment gates",
+    ],
+    stack: ["AWS", "Kubernetes", "Terraform", "Prometheus", "Grafana"],
+    reviewGate:
+      "Can you explain how the full system behaves when traffic spikes, a provider degrades, or a security control fails?",
+    tone:
+      "color-mix(in srgb, var(--signal) 10%, var(--panel) 90%)",
+  },
+] as const;
+
+const operatingModel = [
+  {
+    title: "Study like an operator",
+    copy:
+      "Each week should end with something runnable, reviewable, and explainable. Avoid passive tutorials. Prefer services, flows, dashboards, and postmortem-style notes.",
+  },
+  {
+    title: "Anchor everything to system state",
+    copy:
+      "Do not only learn libraries. Learn how financial state changes, how failures are recorded, and how operators recover without creating duplicates or ambiguity.",
+  },
+  {
+    title: "Keep evidence of progress",
+    copy:
+      "Maintain short architecture notes, decision logs, and test evidence. Those artifacts are what make the roadmap useful in hiring, consulting, and founder conversations.",
+  },
+] as const;
+
+const outcomePillars = [
+  "Design backend services that treat financial state as durable, auditable, and failure-aware.",
+  "Model ledger, payout, and reconciliation workflows with clearer transaction boundaries.",
+  "Build internal consoles that help operators recover from real production incidents.",
+  "Reason across smart contracts, provider APIs, queues, workers, and production infrastructure.",
+] as const;
+
+function RoadmapList({
+  items,
+  title,
+}: {
+  items: readonly string[];
+  title: string;
+}) {
+  return (
+    <div
+      className="rounded-[var(--r-3)] border p-[var(--space-4)]"
+      style={{
+        borderColor: "var(--hairline)",
+        background:
+          "color-mix(in srgb, var(--panel) 74%, var(--panel-2) 26%)",
+      }}
+    >
+      <p
+        className="font-mono text-[0.68rem] uppercase tracking-[0.16em]"
+        style={{ color: "var(--ink-3)" }}
+      >
+        {title}
+      </p>
+
+      <ul className="mt-[var(--space-4)] grid gap-[var(--space-3)]">
+        {items.map((item) => (
+          <li key={item} className="flex items-start gap-[var(--space-3)]">
+            <span
+              aria-hidden
+              className="mt-[0.55rem] h-[0.45rem] w-[0.45rem] shrink-0 rounded-full"
+              style={{ background: "var(--brand)" }}
+            />
+            <span className="text-[0.92rem] leading-[1.7]" style={{ color: "var(--ink-2)" }}>
+              {item}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function PhaseCard({
+  phase,
+  index,
+}: {
+  phase: (typeof roadmapPhases)[number];
+  index: number;
+}) {
+  return (
+    <Card
+      variant="feature"
+      size="md"
+      className="h-full overflow-hidden"
+      style={{
+        background: `linear-gradient(180deg, ${phase.tone} 0%, color-mix(in srgb, var(--panel) 90%, transparent) 100%)`,
+      }}
+    >
+      <CardHeader className="gap-[var(--space-4)]">
+        <div className="flex flex-wrap items-start justify-between gap-[var(--space-4)]">
+          <div className="space-y-[var(--space-2)]">
+            <CardMeta emphasis="brand">{phase.week}</CardMeta>
+            <CardTitle as="h3" size="md" className="max-w-[18ch]">
+              {phase.title}
+            </CardTitle>
+          </div>
+
+          <div
+            className="flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-[var(--r-3)] border"
+            style={{
+              borderColor: "var(--hairline-strong)",
+              background:
+                "color-mix(in srgb, var(--panel) 72%, var(--canvas) 28%)",
+            }}
+          >
+            <CardNumber>{String(index + 1).padStart(2, "0")}</CardNumber>
+          </div>
+        </div>
+
+        <div
+          className="rounded-[var(--r-3)] border px-[var(--space-4)] py-[var(--space-4)]"
+          style={{
+            borderColor: "var(--hairline)",
+            background:
+              "color-mix(in srgb, var(--panel) 68%, var(--canvas) 32%)",
+          }}
+        >
+          <p
+            className="font-mono text-[0.68rem] uppercase tracking-[0.16em]"
+            style={{ color: "var(--ink-3)" }}
+          >
+            Phase focus
+          </p>
+          <p className="mt-[var(--space-3)] text-[0.98rem] leading-[1.75]" style={{ color: "var(--ink)" }}>
+            {phase.focus}
+          </p>
+        </div>
+      </CardHeader>
+
+      <CardBody className="gap-[var(--space-6)]">
+        <div>
+          <p
+            className="font-mono text-[0.68rem] uppercase tracking-[0.16em]"
+            style={{ color: "var(--ink-3)" }}
+          >
+            Why this stage matters
+          </p>
+          <CardDescription className="mt-[var(--space-3)]">
+            {phase.rationale}
+          </CardDescription>
+        </div>
+
+        <div className="grid gap-[var(--space-4)] lg:grid-cols-2">
+          <RoadmapList title="Core systems" items={phase.systems} />
+          <RoadmapList title="Build outputs" items={phase.deliverables} />
+        </div>
+      </CardBody>
+
+      <CardFooter divider className="gap-[var(--space-5)]">
+        <div>
+          <p
+            className="font-mono text-[0.68rem] uppercase tracking-[0.16em]"
+            style={{ color: "var(--ink-3)" }}
+          >
+            Review gate
+          </p>
+          <p className="mt-[var(--space-3)] text-[0.88rem] leading-[1.75]" style={{ color: "var(--ink-2)" }}>
+            {phase.reviewGate}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-[var(--space-2)]">
+          {phase.stack.map((tech) => (
+            <span
+              key={tech}
+              className="rounded-full border px-[var(--space-3)] py-[var(--space-2)] text-[0.76rem]"
+              style={{
+                borderColor: "var(--hairline-strong)",
+                background:
+                  "color-mix(in srgb, var(--panel) 70%, var(--canvas) 30%)",
+                color: "var(--ink-2)",
+              }}
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </CardFooter>
+
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--brand) 55%, transparent) 50%, transparent 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute right-[-5rem] top-[-4rem] h-[11rem] w-[11rem] rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in srgb, var(--brand) 18%, transparent) 0%, transparent 72%)",
+        }}
+      />
+    </Card>
+  );
+}
+
+export default function RoadmapPage() {
+  return (
+    <>
+      <PageHero
+        eyebrow="Roadmap"
+        title="A six-week systems roadmap for engineers moving into fintech and web3 infrastructure."
+        description="This is a practical progression for learning how financial and on-chain systems actually behave in production: state, settlement, retries, interfaces, contracts, distributed workers, and operational reliability."
+        meta={
+          <>
+            <span className="chip">6 structured phases</span>
+            <span className="chip">18 practical build outputs</span>
+            <span className="chip">Backend to production operations</span>
+          </>
+        }
+      />
+
+      <Section divider="top" spacing="default">
+        <Container width="wide">
+          <div className="grid gap-[var(--layout-gap)] lg:grid-cols-12">
+            <Card variant="feature" size="lg" accent="brand" className="lg:col-span-7">
+              <CardHeader>
+                <CardMeta emphasis="brand">Program thesis</CardMeta>
+                <CardTitle as="h2" size="lg" className="max-w-[16ch]">
+                  Learn systems in the order they start to fail in real products.
+                </CardTitle>
+              </CardHeader>
+              <CardBody>
+                <CardDescription className="max-w-[60ch]">
+                  The roadmap begins with runtime and data discipline, moves into
+                  financial state and delivery mechanics, then expands into
+                  operator interfaces, smart contracts, distributed execution,
+                  and production reliability. The point is not to sample tools.
+                  The point is to learn how infrastructure behaves under real
+                  transactional pressure.
+                </CardDescription>
+
+                <div className="grid gap-[var(--space-4)] md:grid-cols-2">
+                  <RoadmapList
+                    title="Who this is for"
+                    items={[
+                      "Backend engineers moving into payments, wallets, or treasury systems",
+                      "Frontend engineers who want to build serious internal financial tooling",
+                      "Web3 builders who need stronger systems architecture beyond contract syntax",
+                    ]}
+                  />
+                  <RoadmapList
+                    title="What to avoid"
+                    items={[
+                      "Treating ledgers like regular CRUD tables",
+                      "Building dashboards without operator recovery flows",
+                      "Learning contract development without security and failure analysis",
+                    ]}
+                  />
+                </div>
+              </CardBody>
+              <CardFooter divider className="flex flex-wrap items-center justify-between gap-[var(--space-4)]">
+                <p className="text-[0.86rem] leading-[1.7]" style={{ color: "var(--ink-3)" }}>
+                  Recommended mode: one production-style build and one written
+                  system review at the end of every week.
+                </p>
+                <div className="flex flex-wrap gap-[var(--space-3)]">
+                  <Button
+                    href="#roadmap-phases"
+                    size="md"
+                    trailingIcon={<ArrowRightIcon width={14} height={14} />}
+                  >
+                    Review phases
+                  </Button>
+                  <Button href="/contact" tone="secondary" size="md">
+                    Ask for a tailored version
+                  </Button>
+                </div>
+              </CardFooter>
+            </Card>
+
+            <div className="grid gap-[var(--space-4)] lg:col-span-5">
+              <div className="grid gap-[var(--space-4)] sm:grid-cols-3 lg:grid-cols-1">
+                <Card variant="data" size="sm">
+                  <CardHeader className="gap-[var(--space-2)]">
+                    <CardMeta emphasis="brand">Timeline</CardMeta>
+                    <CardValue>6 weeks</CardValue>
+                  </CardHeader>
+                  <CardBody>
+                    <CardDescription>
+                      Compact enough to sustain momentum, long enough to build
+                      real artifacts rather than only notes.
+                    </CardDescription>
+                  </CardBody>
+                </Card>
+
+                <Card variant="data" size="sm">
+                  <CardHeader className="gap-[var(--space-2)]">
+                    <CardMeta emphasis="brand">Build volume</CardMeta>
+                    <CardValue>18 outputs</CardValue>
+                  </CardHeader>
+                  <CardBody>
+                    <CardDescription>
+                      Services, consoles, queues, contracts, and architecture
+                      artifacts that compound into a serious systems portfolio.
+                    </CardDescription>
+                  </CardBody>
+                </Card>
+
+                <Card variant="data" size="sm">
+                  <CardHeader className="gap-[var(--space-2)]">
+                    <CardMeta emphasis="brand">Coverage</CardMeta>
+                    <CardValue>3 tracks</CardValue>
+                  </CardHeader>
+                  <CardBody>
+                    <CardDescription>
+                      Financial backends, operator interfaces, and
+                      production-grade infrastructure with web3 overlap.
+                    </CardDescription>
+                  </CardBody>
+                </Card>
+              </div>
+
+              <Card variant="action" size="sm" accent="none">
+                <CardHeader>
+                  <CardMeta emphasis="brand">Expected end state</CardMeta>
+                  <CardTitle as="h2" size="sm">
+                    You should be able to explain and build the system, not
+                    just the feature.
+                  </CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <CardDescription>
+                    By the end, the value is not only that you have shipped a
+                    few demos. It is that you can reason about state
+                    transitions, provider dependencies, operator recovery, and
+                    the tradeoffs that make financial infrastructure expensive
+                    to get wrong.
+                  </CardDescription>
+                </CardBody>
+              </Card>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section divider="top" spacing="default">
+        <Container width="wide">
+          <div className="grid gap-[var(--space-8)]">
+            <header className="grid gap-[var(--space-5)] lg:grid-cols-12 lg:items-end">
+              <div className="lg:col-span-4">
+                <p className="section-label">Phase sequence</p>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 id="roadmap-phases" className="display-2 max-w-[16ch]">
+                  Six stages, each tied to a more realistic systems problem.
+                </h2>
+                <p className="mt-[var(--space-4)] max-w-[62ch] text-[0.98rem] leading-[1.8]" style={{ color: "var(--ink-2)" }}>
+                  The sequencing is deliberate. Each phase introduces the next
+                  layer only after the previous one has enough structure to
+                  support it.
+                </p>
+              </div>
+            </header>
+
+            <div className="grid gap-[var(--space-5)] xl:grid-cols-2">
+              {roadmapPhases.map((phase, index) => (
+                <PhaseCard key={phase.week} phase={phase} index={index} />
+              ))}
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section divider="top" spacing="default">
+        <Container width="wide">
+          <div className="grid gap-[var(--layout-gap)] lg:grid-cols-12 lg:items-start">
+            <header className="flex flex-col gap-[var(--space-5)] lg:col-span-4">
+              <p className="section-label">Working method</p>
+              <h2 className="display-2 max-w-[14ch]">
+                The roadmap works best when the cadence feels operational, not academic.
+              </h2>
+            </header>
+
+            <div className="grid gap-[var(--space-4)] lg:col-span-8 lg:grid-cols-3">
+              {operatingModel.map((item, index) => (
+                <Card key={item.title} variant="content" size="sm" interactive>
+                  <CardHeader className="gap-[var(--space-2)]">
+                    <CardMeta emphasis="brand">
+                      Practice {String(index + 1).padStart(2, "0")}
+                    </CardMeta>
+                    <CardTitle as="h3" size="sm">
+                      {item.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    <CardDescription>{item.copy}</CardDescription>
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section divider="top" spacing="default">
+        <Container width="wide">
+          <Card variant="feature" size="lg" accent="brand">
+            <CardHeader className="gap-[var(--space-4)]">
+              <CardMeta emphasis="brand">Final outcome</CardMeta>
+              <CardTitle as="h2" size="lg" className="max-w-[14ch]">
+                What this roadmap should make visible by the end.
+              </CardTitle>
+              <CardDescription className="max-w-[60ch]">
+                The strongest outcome is not a generic collection of tutorial
+                apps. It is a clearer operating profile: someone who can reason
+                through money movement, infrastructure failure, operator needs,
+                and the technical decisions that shape product trust.
+              </CardDescription>
+            </CardHeader>
+
+            <CardBody className="grid gap-[var(--space-4)] md:grid-cols-2">
+              {outcomePillars.map((item, index) => (
+                <div
+                  key={item}
+                  className="rounded-[var(--r-3)] border p-[var(--space-5)]"
+                  style={{
+                    borderColor: "var(--hairline)",
+                    background:
+                      "color-mix(in srgb, var(--panel) 72%, var(--panel-2) 28%)",
+                  }}
+                >
+                  <p
+                    className="font-mono text-[0.68rem] uppercase tracking-[0.16em]"
+                    style={{ color: "var(--ink-3)" }}
+                  >
+                    Outcome {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <p className="mt-[var(--space-4)] text-[0.96rem] leading-[1.75]" style={{ color: "var(--ink-2)" }}>
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </CardBody>
+          </Card>
+        </Container>
+      </Section>
+
+      <ClosingCta
+        title="Need this roadmap adapted to your current stack or target role?"
+        copy="I can turn this into a tighter track for payment infrastructure, treasury systems, smart contract engineering, or internal operations tooling depending on where you are starting and where you need to land."
+        action={{
+          href: "/contact",
+          label: "Request a tailored roadmap",
+        }}
+      />
+    </>
+  );
+}
