@@ -3,7 +3,19 @@ import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
 import { Diagram } from "@/components/ui/Diagram";
 
-export function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
+/**
+ * Synchronous server component. Code blocks are pre-highlighted by the
+ * parent (typically the lesson page) and indexed by their position in
+ * `blocks`. When `highlights[i]` is missing for a code block, CodeBlock
+ * falls back to a plain `<pre>`.
+ */
+export function BlockRenderer({
+  blocks,
+  highlights,
+}: {
+  blocks: ContentBlock[];
+  highlights?: (string | undefined)[];
+}) {
   return (
     <div className="prose-doc">
       {blocks.map((b, i) => {
@@ -36,6 +48,7 @@ export function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
                 code={b.code}
                 language={b.language}
                 caption={b.caption}
+                highlightedHtml={highlights?.[i]}
               />
             );
           case "callout":

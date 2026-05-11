@@ -12,7 +12,7 @@ import {
 } from "@/lib/content";
 
 interface Props {
-  params: { topic: string };
+  params: Promise<{ topic: string }>;
 }
 
 export async function generateStaticParams() {
@@ -20,7 +20,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const course = getCourseBySlug(params.topic);
+  const { topic } = await params;
+  const course = getCourseBySlug(topic);
   if (!course) return {};
   return {
     title: `Interview prep · ${course.title}`,
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function InterviewByCoursePage({ params }: Props) {
-  const course = getCourseBySlug(params.topic);
+export default async function InterviewByCoursePage({ params }: Props) {
+  const { topic } = await params;
+  const course = getCourseBySlug(topic);
   if (!course) notFound();
   const questions = collectInterviewQuestions(course);
 

@@ -17,7 +17,7 @@ import {
 import { formatMinutes, pad } from "@/lib/utils";
 
 interface Props {
-  params: { courseId: string; weekId: string };
+  params: Promise<{ courseId: string; weekId: string }>;
 }
 
 export async function generateStaticParams() {
@@ -29,7 +29,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const week = getWeek(params.courseId, params.weekId);
+  const { courseId, weekId } = await params;
+  const week = getWeek(courseId, weekId);
   if (!week) return {};
   return {
     title: `Week ${week.number}: ${week.title}`,
@@ -37,9 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function WeekPage({ params }: Props) {
-  const course = getCourseBySlug(params.courseId);
-  const week = getWeek(params.courseId, params.weekId);
+export default async function WeekPage({ params }: Props) {
+  const { courseId, weekId } = await params;
+  const course = getCourseBySlug(courseId);
+  const week = getWeek(courseId, weekId);
   if (!course || !week) notFound();
 
   const totalMinutes = week.modules.reduce(

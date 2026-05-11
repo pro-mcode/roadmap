@@ -14,10 +14,11 @@ import {
   getLesson,
   getWeek,
 } from "@/lib/content";
+import { highlightBlocks } from "@/lib/highlight";
 import { pad } from "@/lib/utils";
 
 interface Props {
-  params: { courseId: string; weekId: string; lessonId: string };
+  params: Promise<{ courseId: string; weekId: string; lessonId: string }>;
 }
 
 export async function generateStaticParams() {
@@ -35,7 +36,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const lesson = getLesson(params.courseId, params.weekId, params.lessonId);
+  const { courseId, weekId, lessonId } = await params;
+  const lesson = getLesson(courseId, weekId, lessonId);
   if (!lesson) return {};
   return {
     title: lesson.title,
@@ -43,24 +45,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function LessonPage({ params }: Props) {
-  const course = getCourseBySlug(params.courseId);
-  const week = getWeek(params.courseId, params.weekId);
-  const lesson = getLesson(params.courseId, params.weekId, params.lessonId);
+export default async function LessonPage({ params }: Props) {
+  const { courseId, weekId, lessonId } = await params;
+  const course = getCourseBySlug(courseId);
+  const week = getWeek(courseId, weekId);
+  const lesson = getLesson(courseId, weekId, lessonId);
   if (!course || !week || !lesson) notFound();
 
-  const prev = getAdjacentLesson(
-    params.courseId,
-    params.weekId,
-    params.lessonId,
-    "prev",
-  );
-  const next = getAdjacentLesson(
-    params.courseId,
-    params.weekId,
-    params.lessonId,
-    "next",
-  );
+  const highlights = await highlightBlocks(lesson.blocks);
+
+  const prev = getAdjacentLesson(courseId, weekId, lessonId, "prev");
+  const next = getAdjacentLesson(courseId, weekId, lessonId, "next");
 
   return (
     <AppShell sidebar={<CourseSidebar course={course} />}>
@@ -80,6 +75,7 @@ export default function LessonPage({ params }: Props) {
         courseSlug={course.slug}
         weekId={week.id}
         lesson={lesson}
+        highlights={highlights}
       />
 
       <nav className="mx-auto mt-10 flex max-w-3xl items-center justify-between gap-3 px-5 pb-16 sm:px-8">

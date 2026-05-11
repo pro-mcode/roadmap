@@ -13,14 +13,16 @@ interface Props {
   courseSlug: string;
   weekId: string;
   lesson: Lesson;
+  /** Pre-rendered shiki HTML, index-aligned with lesson.blocks. */
+  highlights?: (string | undefined)[];
 }
 
-export function LessonRenderer({ courseSlug, weekId, lesson }: Props) {
+export function LessonRenderer({ courseSlug, weekId, lesson, highlights }: Props) {
   return (
     <article className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8">
       <LessonHeader lesson={lesson} />
       <div className="mt-8">
-        <BlockRenderer blocks={lesson.blocks} />
+        <BlockRenderer blocks={lesson.blocks} highlights={highlights} />
       </div>
 
       {lesson.productionInsights && lesson.productionInsights.length > 0 && (

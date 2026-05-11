@@ -186,18 +186,49 @@ body {
 
 /* ─── Code blocks ───────────────────────────────── */
 
+/* Wrapper around the shiki <pre>. The inner <pre> handles background
+   and text colors via the dual-theme CSS variables emitted by shiki. */
 .code-block {
-  background: rgb(var(--c-syntax-bg));
-  color: rgb(var(--c-syntax-text));
   font-family: var(--font-mono);
   font-size: 13.5px;
   line-height: 1.6;
-  padding: 18px 22px;
-  border-radius: 12px;
-  border: 1px solid rgb(var(--c-border));
-  overflow-x: auto;
-  white-space: pre;
   tab-size: 2;
+  overflow-x: auto;
+}
+
+/* Shiki emits inline styles using CSS variables --shiki-light and
+   --shiki-dark (plus -bg variants). The defaults below pin which set
+   the browser uses. We flip them on .dark to match next-themes. */
+.code-block pre.shiki,
+.code-block .shiki {
+  background-color: rgb(var(--c-syntax-bg)) !important;
+  color: var(--shiki-light, rgb(var(--c-syntax-text)));
+  padding: 18px 22px;
+  margin: 0;
+  white-space: pre;
+  font-family: var(--font-mono);
+}
+
+.code-block pre.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+  text-decoration: var(--shiki-light-text-decoration);
+}
+
+.dark .code-block pre.shiki,
+.dark .code-block .shiki {
+  background-color: rgb(var(--c-syntax-bg)) !important;
+  color: var(--shiki-dark, rgb(var(--c-syntax-text)));
+}
+
+.dark .code-block pre.shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
 }
 
 /* ─── Scrollbars ────────────────────────────────── */

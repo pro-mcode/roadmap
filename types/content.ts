@@ -1,24 +1,31 @@
 /**
  * Content Schema
  * --------------
- * The platform is structured around a hierarchical content model:
+ * The platform is organized into ten standalone courses, each with its own
+ * dedicated learning track. The content hierarchy is:
  *
- *   Course → Week → Module/Lesson → Sections (concept | code | callout
- *                                            | exercise | quiz | resource
- *                                            | interview)
+ *   Course → Week → Module → Lesson → Sections (concept | code | callout
+ *                                              | exercise | quiz | resource
+ *                                              | interview)
  *
- * Content lives in /content/courses/<course-slug>/week-NN.ts and is
- * rendered by a single lesson engine. The schema is intentionally
- * structured (rather than freeform MDX) so that:
- *   - search/indexing has typed access to every block
- *   - progress tracking can resolve lesson IDs deterministically
- *   - we can swap renderers without rewriting content
- *
- * The schema also accepts an optional `mdx` field on a lesson so that
- * authors who prefer MDX can opt into it on a per-lesson basis.
+ * Career paths group multiple courses into a goal-oriented sequence
+ * ("Fintech Backend Engineer", "Smart Contract Auditor", etc.).
  */
 
 export type Difficulty = "beginner" | "intermediate" | "senior" | "staff";
+
+export type ProgressionLevel = "beginner" | "intermediate" | "advanced";
+
+export type Discipline =
+  | "language"
+  | "backend"
+  | "infrastructure"
+  | "architecture"
+  | "data"
+  | "computer-science"
+  | "blockchain"
+  | "security"
+  | "interview";
 
 export type CalloutVariant =
   | "note"
@@ -140,6 +147,13 @@ export interface ProductionInsight {
   details: string;
 }
 
+export interface CaseStudy {
+  title: string;
+  summary: string;
+  takeaways: string[];
+  sourceUrl?: string;
+}
+
 export interface Lesson {
   id: string;
   slug: string;
@@ -154,6 +168,7 @@ export interface Lesson {
   interviewQuestions?: InterviewQuestion[];
   resources?: Resource[];
   productionInsights?: ProductionInsight[];
+  caseStudies?: CaseStudy[];
   /** Optional MDX content. If set, the renderer prefers MDX over blocks. */
   mdx?: string;
 }
@@ -162,6 +177,8 @@ export interface Module {
   id: string;
   title: string;
   summary: string;
+  /** Where this module sits in the difficulty arc of the course. */
+  progression?: "foundation" | "core" | "advanced";
   lessons: Lesson[];
 }
 
@@ -169,7 +186,7 @@ export interface Week {
   id: string; // e.g. "week-01"
   number: number;
   title: string;
-  stage: string; // e.g. "Foundation Layer"
+  stage: string; // human-readable phase name within the course
   summary: string;
   objectives: string[];
   concepts: string[];
@@ -182,6 +199,26 @@ export interface Week {
   productionInsights?: ProductionInsight[];
 }
 
+export interface Project {
+  id: string;
+  title: string;
+  summary: string;
+  difficulty: Difficulty;
+  /** Module or week id that should unlock this project. */
+  unlocksAfter?: string;
+  deliverables: string[];
+  estimatedHours: number;
+}
+
+export interface Assessment {
+  id: string;
+  title: string;
+  summary: string;
+  /** Which week this checkpoint sits at. */
+  afterWeekId: string;
+  questions: QuizQuestion[];
+}
+
 export interface Course {
   id: string;
   slug: string;
@@ -190,11 +227,17 @@ export interface Course {
   description: string;
   durationWeeks: number;
   level: Difficulty;
+  progressionLevel: ProgressionLevel;
+  discipline: Discipline;
   outcomes: string[];
   prerequisites: string[];
+  /** Course slugs the learner should ideally complete first. */
+  prerequisiteCourses?: string[];
   audience: string;
-  accent: "indigo" | "amber" | "rose" | "emerald" | "sky";
+  accent: "indigo" | "amber" | "rose" | "emerald" | "sky" | "violet" | "teal";
   weeks: Week[];
+  projects?: Project[];
+  assessments?: Assessment[];
   capstone?: {
     title: string;
     summary: string;
@@ -211,10 +254,12 @@ export interface CourseIndexEntry {
   subtitle: string;
   durationWeeks: number;
   accent: Course["accent"];
+  discipline: Discipline;
+  progressionLevel: ProgressionLevel;
 }
 
 export interface SearchableItem {
-  type: "course" | "week" | "lesson" | "interview";
+  type: "course" | "week" | "lesson" | "interview" | "path";
   courseSlug: string;
   weekId?: string;
   lessonSlug?: string;
@@ -222,4 +267,19 @@ export interface SearchableItem {
   summary: string;
   tags: string[];
   href: string;
+}
+
+export interface CareerPath {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  /** Total weeks across all courseSlugs. */
+  durationWeeks: number;
+  /** Ordered course slugs that compose this path. */
+  courseSlugs: string[];
+  description: string;
+  outcomes: string[];
+  audience: string;
+  accent: Course["accent"];
 }

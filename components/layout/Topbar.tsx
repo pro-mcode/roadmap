@@ -31,6 +31,20 @@ export function Topbar({
           </span>
           <span>Engineering Roadmap</span>
         </Link>
+        <nav className="ml-3 hidden items-center gap-3 text-[13px] text-muted md:flex">
+          <Link href="/courses" className="hover:text-text">
+            Courses
+          </Link>
+          <Link href="/paths" className="hover:text-text">
+            Paths
+          </Link>
+          <Link href="/interview" className="hover:text-text">
+            Interviews
+          </Link>
+          <Link href="/about" className="hover:text-text">
+            About
+          </Link>
+        </nav>
       </div>
 
       <div className="flex items-center gap-2">

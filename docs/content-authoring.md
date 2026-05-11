@@ -11,13 +11,42 @@ content/courses/<course-slug>/
   index.ts              # Course metadata + assembly
   week-01.ts            # Week 1 content
   week-02.ts            # …
-  …
-  week-12.ts            # Week 12 content
+  week-NN.ts            # As many weeks as the course needs
 ```
 
 Each course has an `index.ts` that imports its weekly modules and exports a
 single `Course` object. `lib/content.ts` then registers it in the global
-course list.
+course list. Career paths chain multiple courses and live in
+`lib/career-paths.ts`.
+
+## The ten courses
+
+The platform ships with ten standalone courses. Each has a fixed duration
+agreed at the curriculum level so the total fits inside a 24-week master
+roadmap:
+
+| Slug                          | Weeks | Discipline       |
+|-------------------------------|-------|------------------|
+| `typescript`                  | 2     | language         |
+| `nodejs-express`              | 3     | backend          |
+| `database-design`             | 2     | data             |
+| `algorithms`                  | 2     | computer-science |
+| `system-design`               | 4     | architecture     |
+| `golang`                      | 3     | language         |
+| `blockchain-fundamentals`     | 2     | blockchain       |
+| `solidity`                    | 2     | blockchain       |
+| `rust-language`               | 2     | language         |
+| `smart-contract-security`     | 2     | security         |
+
+Changing a course's duration means editing the curriculum allocation in
+`README.md`, the `durationWeeks` field on the course object, and the
+`durationWeeks` totals on any career paths that include it.
+
+## Adding a new career path
+
+Edit `lib/career-paths.ts` and append a `CareerPath` object. The path's
+`durationWeeks` must equal the sum of its `courseSlugs`' `durationWeeks`.
+The static-generation step will produce a `/paths/<slug>` page automatically.
 
 ## Adding a new lesson
 

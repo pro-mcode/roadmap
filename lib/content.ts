@@ -1,4 +1,5 @@
 import type {
+  CareerPath,
   Course,
   CourseIndexEntry,
   InterviewQuestion,
@@ -6,15 +7,38 @@ import type {
   SearchableItem,
   Week,
 } from "@/types/content";
-import { fintechWeb3Course } from "@/content/courses/fintech-web3";
-import { rustSecurityCourse } from "@/content/courses/rust-security-audit";
+import { typescriptCourse } from "@/content/courses/typescript";
+import { nodejsExpressCourse } from "@/content/courses/nodejs-express";
+import { golangCourse } from "@/content/courses/golang";
+import { databaseDesignCourse } from "@/content/courses/database-design";
+import { algorithmsCourse } from "@/content/courses/algorithms";
+import { systemDesignCourse } from "@/content/courses/system-design";
+import { blockchainFundamentalsCourse } from "@/content/courses/blockchain-fundamentals";
+import { solidityCourse } from "@/content/courses/solidity";
+import { rustLanguageCourse } from "@/content/courses/rust-language";
+import { smartContractSecurityCourse } from "@/content/courses/smart-contract-security";
+import { getAllCareerPaths } from "@/lib/career-paths";
 
 /**
- * Central registry of all courses.
+ * Central registry of all 10 standalone courses.
  * To add a new course, author its content under /content/courses/<slug>/
  * and import the exported Course object here.
+ *
+ * Course ordering reflects the optimal master-roadmap sequence: language
+ * fluency → runtime → data → algorithms → systems → blockchain → security.
  */
-const courses: Course[] = [fintechWeb3Course, rustSecurityCourse];
+const courses: Course[] = [
+  typescriptCourse,
+  nodejsExpressCourse,
+  databaseDesignCourse,
+  algorithmsCourse,
+  systemDesignCourse,
+  golangCourse,
+  blockchainFundamentalsCourse,
+  solidityCourse,
+  rustLanguageCourse,
+  smartContractSecurityCourse,
+];
 
 export function getAllCourses(): Course[] {
   return courses;
@@ -28,7 +52,32 @@ export function getCourseIndex(): CourseIndexEntry[] {
     subtitle: c.subtitle,
     durationWeeks: c.durationWeeks,
     accent: c.accent,
+    discipline: c.discipline,
+    progressionLevel: c.progressionLevel,
   }));
+}
+
+export function getCoursesByProgression() {
+  const buckets: Record<
+    "beginner" | "intermediate" | "advanced",
+    CourseIndexEntry[]
+  > = { beginner: [], intermediate: [], advanced: [] };
+  for (const c of getCourseIndex()) buckets[c.progressionLevel].push(c);
+  return buckets;
+}
+
+export function getCoursesByDiscipline() {
+  const buckets = new Map<string, CourseIndexEntry[]>();
+  for (const c of getCourseIndex()) {
+    const list = buckets.get(c.discipline) ?? [];
+    list.push(c);
+    buckets.set(c.discipline, list);
+  }
+  return buckets;
+}
+
+export function totalCurriculumWeeks(): number {
+  return courses.reduce((sum, c) => sum + c.durationWeeks, 0);
 }
 
 export function getCourseBySlug(slug: string): Course | undefined {
@@ -159,6 +208,16 @@ export function buildSearchIndex(): SearchableItem[] {
         href: `/interview/${course.slug}#${q.id}`,
       });
     }
+  }
+  for (const path of getAllCareerPaths()) {
+    items.push({
+      type: "path",
+      courseSlug: path.slug,
+      title: path.title,
+      summary: path.subtitle,
+      tags: ["career-path", `${path.durationWeeks}w`],
+      href: `/paths/${path.slug}`,
+    });
   }
   return items;
 }

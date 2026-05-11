@@ -16,7 +16,7 @@ import {
 import { formatMinutes, pad } from "@/lib/utils";
 
 interface Props {
-  params: { courseId: string };
+  params: Promise<{ courseId: string }>;
 }
 
 export async function generateStaticParams() {
@@ -24,7 +24,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const course = getCourseBySlug(params.courseId);
+  const { courseId } = await params;
+  const course = getCourseBySlug(courseId);
   if (!course) return {};
   return {
     title: course.title,
@@ -32,8 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CoursePage({ params }: Props) {
-  const course = getCourseBySlug(params.courseId);
+export default async function CoursePage({ params }: Props) {
+  const { courseId } = await params;
+  const course = getCourseBySlug(courseId);
   if (!course) notFound();
 
   const lessonsCount = totalLessons(course);
@@ -51,7 +53,8 @@ export default function CoursePage({ params }: Props) {
         />
 
         <div className="mt-6 flex flex-wrap items-center gap-2">
-          <Badge variant="accent">{course.level}</Badge>
+          <Badge variant="accent">{course.progressionLevel}</Badge>
+          <Badge variant="outline">{course.discipline}</Badge>
           <Badge variant="outline">{course.durationWeeks} weeks</Badge>
           <Badge variant="outline">
             <Clock size={10} /> {formatMinutes(minutes)}
@@ -102,8 +105,27 @@ export default function CoursePage({ params }: Props) {
           </div>
         </div>
 
+        {course.prerequisiteCourses && course.prerequisiteCourses.length > 0 && (
+          <div className="mt-8 rounded-lg border border-border bg-surface p-5">
+            <h3 className="font-mono text-[11px] uppercase tracking-wider text-muted">
+              Recommended courses first
+            </h3>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {course.prerequisiteCourses.map((slug) => (
+                <Link
+                  key={slug}
+                  href={`/courses/${slug}`}
+                  className="rounded-md border border-border bg-canvas px-2 py-1 text-[12px] hover:border-border-strong"
+                >
+                  {slug}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         <h2 className="mt-12 font-mono text-[12px] uppercase tracking-[0.18em] text-muted">
-          The 12-week curriculum
+          The {course.durationWeeks}-week curriculum
         </h2>
         <ul className="mt-4 grid gap-3">
           {course.weeks.map((w) => (
@@ -134,6 +156,38 @@ export default function CoursePage({ params }: Props) {
             </li>
           ))}
         </ul>
+
+        {course.projects && course.projects.length > 0 && (
+          <section className="mt-12">
+            <h2 className="mb-4 font-mono text-[12px] uppercase tracking-[0.18em] text-muted">
+              Projects
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {course.projects.map((proj) => (
+                <div
+                  key={proj.id}
+                  className="rounded-xl border border-border bg-surface p-5"
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline">{proj.difficulty}</Badge>
+                    <Badge variant="outline">~{proj.estimatedHours}h</Badge>
+                  </div>
+                  <h4 className="mt-3 text-[16px] font-semibold">
+                    {proj.title}
+                  </h4>
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-muted">
+                    {proj.summary}
+                  </p>
+                  <ul className="mt-3 list-disc pl-5 text-[12.5px] text-text/85">
+                    {proj.deliverables.map((d, i) => (
+                      <li key={i}>{d}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {course.capstone && (
           <section className="mt-12 rounded-lg border border-accent/30 bg-accent/[0.04] p-5">
